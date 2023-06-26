@@ -1,0 +1,6 @@
+package com.example.koko
+
+import io.flutter.embedding.android.FlutterActivity
+
+class MainActivity: FlutterActivity() {
+}
