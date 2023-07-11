@@ -1,19 +1,31 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
-import 'features/home/presentation/view/home_view.dart';
-import 'core/global/app_texts.dart';
+import 'home_view.dart';
 
-void main() => runApp(const KokoApp());
+void main() {
+  SystemChrome.setSystemUIOverlayStyle(
+    const SystemUiOverlayStyle(
+      systemNavigationBarColor: Colors.transparent,
+      statusBarBrightness: Brightness.light,
+      statusBarColor: Colors.transparent,
+    ),
+  );
+  runApp(const KokoApp());
+}
 
 class KokoApp extends StatelessWidget {
-  const KokoApp({super.key});
+  const KokoApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: AppTexts.appTitle,
-      home: HomeView(),
+      title: 'Koko-App',
+      theme: ThemeData(
+        primarySwatch: Colors.purple,
+      ),
+      home: const HomeView(),
     );
   }
 }
