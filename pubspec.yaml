@@ -12,6 +12,7 @@ dependencies:
 
   tflite: ^1.1.2
   image_picker: ^1.0.0
+  animated_text_kit: ^4.2.2
 
 dev_dependencies:
   flutter_test:

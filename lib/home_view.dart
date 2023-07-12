@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:tflite/tflite.dart';
@@ -11,15 +12,19 @@ class HomeView extends StatefulWidget {
   State<HomeView> createState() => _HomeViewState();
 }
 
-class _HomeViewState extends State<HomeView> {
-  // For error checking
-  // bool loading = false;
-  // chosen image from gallery or camera
-  File? pickedImage;
+class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
+  final List<Color> colorizeColors = <Color>[
+    Colors.purple,
+    Colors.blue,
+    Colors.yellow,
+    Colors.red,
+  ];
+
+  File? _pickedImage;
   // prediction made by TensorFlow model
-  List<dynamic>? prediction;
+  List<dynamic>? _prediction;
   // allows user to pick an image from camera or gallery
-  final ImagePicker picker = ImagePicker();
+  final ImagePicker _picker = ImagePicker();
 
   @override
   void initState() {
@@ -33,13 +38,13 @@ class _HomeViewState extends State<HomeView> {
   @override
   void dispose() {
     super.dispose();
-
     Tflite.close();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         title: const Text(
           "Chicken Feces Classification",
@@ -51,7 +56,7 @@ class _HomeViewState extends State<HomeView> {
         elevation: 0,
         centerTitle: true,
       ),
-      body: (pickedImage == null && prediction == null)
+      body: (_pickedImage == null && _prediction == null)
           ? const Center(
               child: Text(
                 "Choose an image to classify",
@@ -68,7 +73,7 @@ class _HomeViewState extends State<HomeView> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  pickedImage == null
+                  _pickedImage == null
                       ? Container()
                       : Stack(
                           alignment: AlignmentDirectional.topEnd,
@@ -76,12 +81,13 @@ class _HomeViewState extends State<HomeView> {
                             Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: SizedBox(
-                                height: MediaQuery.of(context).size.width * 0.5,
-                                width: MediaQuery.of(context).size.width * 0.5,
+                                height:
+                                    MediaQuery.of(context).size.width * 0.55,
+                                width: MediaQuery.of(context).size.width * 0.55,
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(30),
                                   child: Image.file(
-                                    pickedImage!,
+                                    _pickedImage!,
                                     fit: BoxFit.fill,
                                   ),
                                 ),
@@ -93,8 +99,8 @@ class _HomeViewState extends State<HomeView> {
                               child: IconButton(
                                 onPressed: () {
                                   setState(() {
-                                    pickedImage = null;
-                                    prediction = null;
+                                    _pickedImage = null;
+                                    _prediction = null;
                                   });
                                 },
                                 icon: const Icon(
@@ -107,17 +113,62 @@ class _HomeViewState extends State<HomeView> {
                           ],
                         ),
                   const SizedBox(height: 20),
-                  prediction != null
-                      ? Text(
-                          '${prediction!}',
-                          style: const TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 20.0,
-                          ),
-                          maxLines: null,
+                  _prediction != null &&
+                          double.parse(_prediction![0]["confidence"]
+                                  .toStringAsFixed(1)) >
+                              0.5
+                      ? Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const Text(
+                                  "Status: ",
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 25.0,
+                                  ),
+                                ),
+                                AnimatedTextKit(
+                                  isRepeatingAnimation: false,
+                                  animatedTexts: [
+                                    TyperAnimatedText(
+                                      '${_prediction![0]["label"]}',
+                                      textAlign: TextAlign.center,
+                                      speed: const Duration(milliseconds: 100),
+                                      textStyle: TextStyle(
+                                        color: Theme.of(context).primaryColor,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 25.0,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 15),
+                            AnimatedTextKit(
+                              animatedTexts: [
+                                ColorizeAnimatedText(
+                                  'Confidence: ${(_prediction![0]['confidence'].toStringAsFixed(1))}',
+                                  textStyle: const TextStyle(
+                                    fontSize: 23,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                  colors: colorizeColors,
+                                ),
+                              ],
+                            ),
+                          ],
                         )
-                      : Container()
+                      : const Text(
+                          "There's no disease",
+                          style: TextStyle(
+                            fontSize: 23,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                 ],
               ),
             ),
@@ -126,12 +177,6 @@ class _HomeViewState extends State<HomeView> {
         backgroundColor: Colors.purple,
         child: const Icon(Icons.image),
       ),
-      // HomeViewBody(
-      //   loading: loading,
-      //   image: pickedImage,
-      //   pickImage: pickImage(),
-      //   pickGalleryImage: pickGalleryImage(),
-      // ),
     );
   }
 
@@ -145,7 +190,16 @@ class _HomeViewState extends State<HomeView> {
               child: ListBody(
                 children: <Widget>[
                   GestureDetector(
-                    onTap: pickImage,
+                    onTap: () {
+                      if (_pickedImage != null && _prediction != null) {
+                        setState(() {
+                          _pickedImage = null;
+                          _prediction = null;
+                        });
+                      }
+                      pickImage();
+                      Navigator.pop(context);
+                    },
                     child: const Text(
                       "Take a Picture",
                       style: TextStyle(color: Colors.white, fontSize: 20.0),
@@ -153,7 +207,16 @@ class _HomeViewState extends State<HomeView> {
                   ),
                   const Padding(padding: EdgeInsets.all(10.0)),
                   GestureDetector(
-                    onTap: pickGalleryImage,
+                    onTap: () {
+                      if (_pickedImage != null && _prediction != null) {
+                        setState(() {
+                          _pickedImage = null;
+                          _prediction = null;
+                        });
+                      }
+                      pickGalleryImage();
+                      Navigator.pop(context);
+                    },
                     child: const Text(
                       "Select image ",
                       style: TextStyle(color: Colors.white, fontSize: 20.0),
@@ -172,38 +235,38 @@ class _HomeViewState extends State<HomeView> {
     );
 
     setState(() {
-      prediction = output;
+      _prediction = output;
     });
   }
 
   Future<void> loadModel() async {
     await Tflite.loadModel(
-      model: 'assets/tflite_model/kheva.tflite',
+      model: 'assets/tflite_model/kheva4.tflite',
       labels: 'assets/tflite_model/labels.txt',
     );
   }
 
   Future<void> pickImage() async {
-    XFile? image = await picker.pickImage(source: ImageSource.camera);
+    XFile? image = await _picker.pickImage(source: ImageSource.camera);
 
     if (image == null) return;
 
     setState(() {
-      pickedImage = File(image.path);
+      _pickedImage = File(image.path);
     });
 
-    classifyImage(pickedImage!);
+    classifyImage(_pickedImage!);
   }
 
   Future<void> pickGalleryImage() async {
-    XFile? image = await picker.pickImage(source: ImageSource.gallery);
+    XFile? image = await _picker.pickImage(source: ImageSource.gallery);
 
     if (image == null) return;
 
     setState(() {
-      pickedImage = File(image.path);
+      _pickedImage = File(image.path);
     });
 
-    classifyImage(pickedImage!);
+    classifyImage(_pickedImage!);
   }
 }
