@@ -117,6 +117,6 @@ We would like to express our gratitude to the contributors of the TensorFlow and
 If you have any questions, suggestions, or issues, feel free to contact the project maintainers:
 
 - [Ahmed Ghaly's Email](ahmedghaly0767@gmail.com)
-- [AbdelKareem](kareem01095134688@gmail.com)
+- [AbdelKareem's Email](kareem01095134688@gmail.com)
 
 Thank you for using the Chicken Disease Classification App! Happy classifying and take good care of your chickens! 🐔🐓
