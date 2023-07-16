@@ -47,7 +47,7 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
       backgroundColor: Colors.white,
       appBar: AppBar(
         title: const Text(
-          "Chicken Feces Classification",
+          "Chicken Disease Classification",
           style: TextStyle(
             fontSize: 22,
             fontWeight: FontWeight.w600,
@@ -59,7 +59,7 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
       body: (_pickedImage == null && _prediction == null)
           ? const Center(
               child: Text(
-                "Choose an image to classify",
+                "Select or Take an image",
                 style: TextStyle(
                   color: Colors.black,
                   fontWeight: FontWeight.bold,
@@ -163,7 +163,7 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
                           ],
                         )
                       : const Text(
-                          "There's no disease",
+                          "Can't have a disease",
                           style: TextStyle(
                             fontSize: 23,
                             fontWeight: FontWeight.bold,
@@ -218,7 +218,7 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
                       Navigator.pop(context);
                     },
                     child: const Text(
-                      "Select image ",
+                      "Select an image ",
                       style: TextStyle(color: Colors.white, fontSize: 20.0),
                     ),
                   )

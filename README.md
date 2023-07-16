@@ -1,10 +1,22 @@
-# Chicken Disease Classification App with TensorFlow Lite and Flutter
-
-![Chicken Disease Classification App](app_screenshot.png)
-
-## Overview
+# Koko-App
 
 This project is a Flutter mobile application for classifying chicken diseases using TensorFlow Lite. The app uses a deep learning model trained on a dataset of chicken images to predict the presence of various diseases in chickens. TensorFlow Lite is utilized for on-device machine learning, allowing real-time and efficient inference directly on the user's mobile device.
+
+## Contents
+
+- [Preview](#preview)
+- [Features](#features)
+- [Installation](#installation)
+- [Usage](#usage)
+- [TensorFlow Lite Model](#tensorflow-lite-model)
+- [Contributing](#contributing)
+- [License](#license)
+- [Acknowledgments](#acknowledgments)
+- [Contact](#contact)
+
+## Preview
+
+https://github.com/ahmedghaly15/Koko-App/assets/108659381/441d35ea-e3f5-4504-8ef8-d11366e8fa1e
 
 ## Features
 
@@ -60,7 +72,7 @@ To run this application on your local machine or a mobile device, follow these s
 
 ## Usage
 
-1. Open the Chicken Disease Classification App on your device.
+1. Open the Koko-App on your device.
 
 2. Capture a photo of a chicken or select an image from your gallery.
 
@@ -104,7 +116,7 @@ We would like to express our gratitude to the contributors of the TensorFlow and
 
 If you have any questions, suggestions, or issues, feel free to contact the project maintainers:
 
-- Your Name: your.email@example.com
-- Collaborator Name: collaborator.email@example.com
+- [Ahmed Ghaly's Email](ahmedghaly0767@gmail.com)
+- [AbdelKareem](kareem01095134688@gmail.com)
 
 Thank you for using the Chicken Disease Classification App! Happy classifying and take good care of your chickens! 🐔🐓
