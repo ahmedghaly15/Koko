@@ -10,7 +10,6 @@ This project is a Flutter mobile application for classifying chicken diseases us
 - [Usage](#usage)
 - [TensorFlow Lite Model](#tensorflow-lite-model)
 - [Contributing](#contributing)
-- [License](#license)
 - [Acknowledgments](#acknowledgments)
 - [Contact](#contact)
 
@@ -103,10 +102,6 @@ Contributions to this project are welcome and encouraged. If you want to contrib
 5. Submit a pull request to this repository, explaining the changes you made.
 
 Please ensure that you adhere to the project's coding standards and best practices while contributing.
-
-## License
-
-This project is licensed under the [MIT License](LICENSE).
 
 ## Acknowledgments
 
